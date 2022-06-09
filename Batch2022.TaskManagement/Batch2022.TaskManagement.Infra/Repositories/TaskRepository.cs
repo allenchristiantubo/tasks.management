@@ -96,7 +96,7 @@ namespace Batch2022.TaskManagement.Infra.Repositories
                 throw new InvalidTaskDescriptionArgumentException();
             }
 
-            var taskToUpdate = FindById(id);
+            var taskToUpdate = FindById(id);    
 
             if (taskToUpdate != null)
             {
@@ -104,7 +104,15 @@ namespace Batch2022.TaskManagement.Infra.Repositories
                 taskToUpdate.TaskDescription = task.TaskDescription;
                 taskToUpdate.Status = task.Status;
                 taskToUpdate.DateModified = DateTime.Today;
-                taskToUpdate.DateFinished = task.DateFinished;  
+                if(task.Status == Tasks.TaskStatus.Completed)
+                {
+                    taskToUpdate.DateFinished = DateTime.Today;
+                }
+                else if (task.Status != Tasks.TaskStatus.Completed)
+                {
+                    taskToUpdate.DateFinished = null;
+                }
+                //taskToUpdate.DateFinished = task.DateFinished;
 
                 dbContext.SaveChanges();
                 return taskToUpdate;

@@ -19,7 +19,7 @@ namespace Batch2022.TaskManagement.Domain.Models.Tasks
         /// <summary>
         /// Tags of the task
         /// </summary>
-        public virtual ICollection<Tag> Tag { get; set; }
+        public virtual ICollection<Tag>? Tag { get; set; }
         
         /// <summary>
         /// The date the task was created
