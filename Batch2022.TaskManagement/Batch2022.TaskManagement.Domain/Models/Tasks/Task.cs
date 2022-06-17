@@ -24,7 +24,7 @@ namespace Batch2022.TaskManagement.Domain.Models.Tasks
         /// <summary>
         /// The date the task was created
         /// </summary>
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
 
         /// <summary>
         /// The date the task was updated

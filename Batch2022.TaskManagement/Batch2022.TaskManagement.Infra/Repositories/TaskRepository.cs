@@ -38,11 +38,11 @@ namespace Batch2022.TaskManagement.Infra.Repositories
                 throw new InvalidTaskDescriptionArgumentException();
             }
 
-            newTask.TaskId = Guid.NewGuid();
             newTask.DateCreated = DateTime.Today;
             newTask.Status = Tasks.TaskStatus.New;
-            newTask.DateModified = null;
+            newTask.DateModified = DateTime.Today;
             newTask.DateFinished = null;
+
             dbContext.Tasks.Add(newTask);
             dbContext.SaveChanges();
 
@@ -96,7 +96,7 @@ namespace Batch2022.TaskManagement.Infra.Repositories
                 throw new InvalidTaskDescriptionArgumentException();
             }
 
-            var taskToUpdate = FindById(id);    
+            var taskToUpdate = FindById(id);
 
             if (taskToUpdate != null)
             {
@@ -104,15 +104,16 @@ namespace Batch2022.TaskManagement.Infra.Repositories
                 taskToUpdate.TaskDescription = task.TaskDescription;
                 taskToUpdate.Status = task.Status;
                 taskToUpdate.DateModified = DateTime.Today;
+                taskToUpdate.Tag = task.Tag;
                 if(task.Status == Tasks.TaskStatus.Completed)
                 {
                     taskToUpdate.DateFinished = DateTime.Today;
                 }
-                else if (task.Status != Tasks.TaskStatus.Completed)
+                else if(task.Status != Tasks.TaskStatus.Completed)
                 {
                     taskToUpdate.DateFinished = null;
                 }
-                //taskToUpdate.DateFinished = task.DateFinished;
+                  
 
                 dbContext.SaveChanges();
                 return taskToUpdate;

@@ -21,16 +21,7 @@ builder.Services.AddDbContext<TasksDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
     .AddNewtonsoftJson(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
-
-builder.Services.AddCors(options => 
-    {
-        options.AddPolicy("CorsPolicy-public",
-               builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-            .Build()); ;
-    });
-
+builder.Services.AddCors(options => { options.AddPolicy("CorsPolicy-public", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().Build()); });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

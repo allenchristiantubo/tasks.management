@@ -326,5 +326,43 @@ namespace Batch2022.TaskManage.Infra.Tests
             mockTasksDbContext.Tasks.Remove(taskToCreate);
             mockTasksDbContext.SaveChanges();
         }
+
+        [Fact]
+        public void Update_WithDateFinishedIsLessThanDateCreated_ThrowsInvalidDateFinishedArgumentException()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<TasksDbContext>()
+                .UseInMemoryDatabase(databaseName: "TasksDb")
+                .Options;
+
+            using var mockTasksDbContext = new TasksDbContext(options);
+            TaskRepository sut = new TaskRepository(mockTasksDbContext);
+
+            var taskToCreate = new Tasks.Task
+            {
+                TaskName = "Learn cooking",
+                TaskDescription = "Learn to cook while taching youtube",
+                DateCreated = DateTime.Today
+            };
+
+            mockTasksDbContext.Tasks.Add(taskToCreate);
+            mockTasksDbContext.SaveChanges();
+
+            var task = new Tasks.Task
+            {
+                TaskName = "Learn swimming",
+                TaskDescription = "Attend swimming lessons",
+                Status = Tasks.TaskStatus.Completed,
+                DateFinished = DateTime.Parse("2020-05-05")
+            };
+
+            // Act & Assert
+            Assert.True(task.DateFinished < taskToCreate.DateCreated);
+            Assert.Throws<InvalidDateFinishedArgumentException>(() => sut.Update(taskToCreate.TaskId, task));
+
+            // Cleanup
+            mockTasksDbContext.Tasks.Remove(taskToCreate);
+            mockTasksDbContext.SaveChanges();
+        }
     }
 }
